@@ -40,7 +40,7 @@
 
             <div>
                 <p>This button posts a review with reviewID 0, movieID 1, userID 1 and rating 1.</p>
-                <input type="button" id="postHardCoded" value="POST Hardcoded Review">
+                <!--DO NOT TOUCH --> <input type="button" id="postHardCoded" value="POST Hardcoded Review"> <!--DO NOT TOUCH -->
             </div>
         </li>
 
@@ -48,16 +48,21 @@
             <div id="postSpecific">
                 <p>Post a review selecting a user and movie:</p>
                 <select name="movieID" id="movieID">
-                    <option value="1">The Movie Title</option>
-                    <option value="2">The Movie Title2</option>          
+                    
+            <c:forEach var="movie" items="${movies}" >
+              <option value="${movie.value.title}"><c:out value="${movie.value.title}, ${movie.value.director}"/></option>
+            </c:forEach>
                 </select>
                 <select name="userID" id="userID">
-                    <option value="1">Username 1</option>
-                    <option value="2">UserName 2</option>          
-                </select> 
+             <c:forEach var="user" items="${users}" >
+              <option value="${user.value.username}"><c:out value="${user.value.username}"/></option>
+            </c:forEach>   
+               </select>
+                
                 <select name="rating" id="rating">
-                    <option value="1">1</option>
-                    <option value="10">10</option>          
+            <c:forEach var="rating" items="${rating}">
+                <option value="${rating.number.value}"><c:out value="${rating.number.value}"/></option>
+                    </c:forEach>     
                 </select>   
 
                 <input type="button" id="postReview" value="POST Review">

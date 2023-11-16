@@ -51,7 +51,8 @@ public class Public extends HttpServlet {
         
         LinkedHashMap<Integer, Movie> movies = null;
         LinkedHashMap<Integer, User> users = null;
-
+        int[] numbers = new int[]{1,2,3,4,5,6,7,8,9,10};
+        
         try {
             movies = MovieDB.selectAllMovies();
             users = UserDB.getAllUsers();
@@ -62,7 +63,7 @@ public class Public extends HttpServlet {
 
         request.setAttribute("movies", movies);
         request.setAttribute("users", users);
-
+        request.setAttribute("rating", numbers);
 
        
 

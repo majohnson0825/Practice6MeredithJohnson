@@ -5,6 +5,7 @@
 package controllers;
 
 import business.User;
+import business.Review;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
@@ -127,7 +128,25 @@ public class API extends HttpServlet {
             //that would be a PUT, not a POST
             response.setStatus(404);
 
+        } else if ("reviews".equals(last)) {
+            JsonObject data = new Gson().fromJson(request.getReader(), JsonObject.class);
+            int ratingID = data.get("ratingID").getAsInt();
+            int movieID = data.get("movieID").getAsInt();
+            int userID = data.get("userID").getAsInt();
+            int rating = data.get("rating").getAsInt();
+            
+            Review review = new Review(ratingID, movieID, userID, rating);
+            try {
+                int id = MovieDB.insertReview(review);
+                response.setStatus(201);
+                
+                json = "{\"location\": \"" + request.getServletPath() + "/reviews/" + id + "\"}";
+                System.out.println(json);
+            } catch(SQLException ex) {
+                response.setStatus(500);
+            }
         }
+        
 
         try ( PrintWriter out = response.getWriter()) {
             if ("".equals(json)) {
