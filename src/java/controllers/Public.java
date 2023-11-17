@@ -7,6 +7,7 @@ package controllers;
 
 import business.Movie;
 import business.User;
+import business.Review;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import data.MovieDB;
@@ -52,10 +53,12 @@ public class Public extends HttpServlet {
         LinkedHashMap<Integer, Movie> movies = null;
         LinkedHashMap<Integer, User> users = null;
         int[] numbers = new int[]{1,2,3,4,5,6,7,8,9,10};
+        LinkedHashMap<Integer, Review> reviews = null;
         
         try {
             movies = MovieDB.selectAllMovies();
             users = UserDB.getAllUsers();
+            reviews = MovieDB.selectAllReviews();
 
         } catch (Exception ex) {
             Logger.getLogger(Public.class.getName()).log(Level.SEVERE, "DB calls in Public controller failed", ex);
@@ -64,6 +67,7 @@ public class Public extends HttpServlet {
         request.setAttribute("movies", movies);
         request.setAttribute("users", users);
         request.setAttribute("rating", numbers);
+        request.setAttribute("reviews", reviews);
 
        
 

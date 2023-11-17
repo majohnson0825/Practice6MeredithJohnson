@@ -11,8 +11,8 @@ import java.util.logging.Logger;
 public class MovieDB {
 
     private static final Logger LOG = Logger.getLogger(MovieDB.class.getName());
-    
-        public static int insertReview(Review review) throws SQLException {
+
+    public static int insertReview(Review review) throws SQLException {
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
         PreparedStatement ps = null;
@@ -41,6 +41,7 @@ public class MovieDB {
 
         }
     }
+
     public static int deleteReview(int ratingID, int userID) throws SQLException {
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
@@ -69,8 +70,7 @@ public class MovieDB {
 
         }
     }
-    
-    
+
     public static int deleteReview(int ratingID) throws SQLException {
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
@@ -93,6 +93,44 @@ public class MovieDB {
                 pool.freeConnection(connection);
             } catch (Exception e) {
                 LOG.log(Level.SEVERE, "*** delete review null pointer??", e);
+                throw e;
+            }
+
+        }
+    }
+
+    public static LinkedHashMap<Integer, Review> selectAllReviews() throws SQLException {
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = pool.getConnection();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        LinkedHashMap<Integer, Review> reviews = new LinkedHashMap<Integer, Review>();
+        String query = "SELECT * FROM ratings ";
+        try {
+            ps = connection.prepareStatement(query);
+            rs = ps.executeQuery();
+
+            Review review = null;
+            while (rs.next()) {
+                review = new Review();
+                review.setRatingID(rs.getInt("ratingID"));
+                review.setMovieID(rs.getInt("movieID"));
+                review.setUserID(rs.getInt("userID"));
+                review.setRating(rs.getInt("rating"));
+                reviews.put(review.getRatingID(), review);
+            }
+            return reviews;
+        } catch (SQLException e) {
+            LOG.log(Level.SEVERE, "*** select all reviews sql", e);
+            throw e;
+
+        } finally {
+            try {
+                rs.close();
+                ps.close();
+                pool.freeConnection(connection);
+            } catch (Exception e) {
+                LOG.log(Level.SEVERE, "*** select all reviews null pointer??", e);
                 throw e;
             }
 
@@ -176,14 +214,14 @@ public class MovieDB {
 
         }
     }
-    
-     public static Movie selectMovieByID(int id) throws SQLException {
+
+    public static Movie selectMovieByID(int id) throws SQLException {
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
         PreparedStatement ps = null;
         ResultSet rs = null;
         Movie movie = new Movie();
-        
+
         String query = "SELECT * FROM movies where movieID = ?";
         try {
             ps = connection.prepareStatement(query);
@@ -199,7 +237,7 @@ public class MovieDB {
             } else {
                 throw new SQLException("Movie not found.");
             }
-            
+
             return movie;
         } catch (SQLException e) {
             LOG.log(Level.SEVERE, "*** select one movie sql", e);
@@ -216,6 +254,6 @@ public class MovieDB {
             }
 
         }
-     }
+    }
 
 }

@@ -40,7 +40,7 @@
 
             <div>
                 <p>This button posts a review with reviewID 0, movieID 1, userID 1 and rating 1.</p>
-                <!--DO NOT TOUCH --> <input type="button" id="postHardCoded" value="POST Hardcoded Review"> <!--DO NOT TOUCH -->
+                <input type="button" id="postHardCoded" value="POST Hardcoded Review">
             </div>
         </li>
 
@@ -50,18 +50,18 @@
                 <select name="movieID" id="movieID">
                     
             <c:forEach var="movie" items="${movies}" >
-              <option value="${movie.value.title}"><c:out value="${movie.value.title}, ${movie.value.director}"/></option>
+              <option value="${movie.value.id}"><c:out value="${movie.value.title}, ${movie.value.director}"/></option>
             </c:forEach>
                 </select>
                 <select name="userID" id="userID">
              <c:forEach var="user" items="${users}" >
-              <option value="${user.value.username}"><c:out value="${user.value.username}"/></option>
+              <option value="${user.value.userID}"><c:out value="${user.value.userID}, ${user.value.username}"/></option>
             </c:forEach>   
                </select>
                 
                 <select name="rating" id="rating">
             <c:forEach var="rating" items="${rating}">
-                <option value="${rating.number.value}"><c:out value="${rating.number.value}"/></option>
+                <option value="${rating}"><c:out value="${rating}"/></option>
                     </c:forEach>     
                 </select>   
 
@@ -74,8 +74,11 @@
             <div>
                 <p>Select a review to delete:</p>
                 <select name="reviewID" id="reviewID">
-                    <option value="1">MOVIE TITLE rated REVIEW VALUE</option>
-                    <option value="2">MOVIE TITLE rated REVIEW VALUE</option>          
+                    <c:forEach var="review" items="${reviews}">
+                        <option value="${review.value.ratingID}"><c:out value="${movies[Integer.valueOf(review.value.movieID)].title} rated ${review.value.rating}"/></option> 
+                        <!--   -->
+                    </c:forEach>
+                   
                 </select>
 
                 <input type="button" id="deleteReview" value="Delete Review">

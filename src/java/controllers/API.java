@@ -13,6 +13,7 @@ import data.MovieDB;
 import data.UserDB;
 import java.io.IOException;
 import java.io.PrintWriter;
+import static java.lang.Integer.parseInt;
 import java.sql.SQLException;
 import java.util.LinkedHashMap;
 import java.util.logging.Level;
@@ -44,7 +45,6 @@ public class API extends HttpServlet {
 
         String uri = request.getRequestURI();
         String[] part = uri.split("/");
-
         String last = part[part.length - 1];
 
         if ("users".equals(last)) {
@@ -157,14 +157,23 @@ public class API extends HttpServlet {
         }
     }
 
+    @Override
     protected void doDelete(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        int reviewIDtoDelete = 1;
+        String uri = request.getRequestURI();
+        String[] parts = uri.split("/");
+        String last = parts[parts.length - 1];
+        
         try {
+            int reviewIDtoDelete = parseInt(last);
             MovieDB.deleteReview(reviewIDtoDelete);
+            response.setStatus(200);
         } catch (SQLException ex) {
+            response.setStatus(500);
 
+        }catch (NumberFormatException e) {
+            response.setStatus(400);
         }
 
     }
